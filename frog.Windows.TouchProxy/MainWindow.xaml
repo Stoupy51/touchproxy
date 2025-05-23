@@ -67,12 +67,6 @@
 							</StackPanel>
 						</CheckBox.Content>
 					</CheckBox>
-					<CheckBox IsChecked="{Binding Path=TouchInjectionService.IsContactVisible, Mode=TwoWay}" Content="Show Contacts" Margin="0,2,0,0">
-						<CheckBox.Style>
-							<Style TargetType="{x:Type CheckBox}">
-							</Style>
-						</CheckBox.Style>
-					</CheckBox>
 				</StackPanel>
 
 				<StackPanel DockPanel.Dock="Left" Orientation="Vertical" Margin="0,0,5,0" HorizontalAlignment="Stretch">

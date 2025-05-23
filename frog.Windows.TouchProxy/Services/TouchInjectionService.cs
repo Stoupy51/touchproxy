@@ -74,20 +74,6 @@ namespace frog.Windows.TouchProxy.Services
 			set { _isContactEnabled = value; } 
 		}
 
-		private bool _isContactVisible = true;
-		public bool IsContactVisible 
-		{
-			get { return _isContactVisible; }
-			set 
-			{ 
-				_isContactVisible = value;
-				if (_tuioClient != null)
-				{
-					TouchInjection.Initialize(MAX_CONTACTS, this.IsContactVisible ? TouchFeedback.INDIRECT : TouchFeedback.NONE);
-				}
-			}  
-		}
-
 		private bool _isInvertedCalibration = false;
 		public bool IsInvertedCalibration
 		{
@@ -295,7 +281,7 @@ namespace frog.Windows.TouchProxy.Services
 				Stop(); 
 			}
 
-			TouchInjection.Initialize(MAX_CONTACTS, this.IsContactVisible ? TouchFeedback.INDIRECT : TouchFeedback.NONE);
+			TouchInjection.Initialize(MAX_CONTACTS, TouchFeedback.NONE);
 
 			_tuioClient = new TuioClient(this.Port);
 			_tuioClient.addTuioListener(this);
@@ -487,6 +473,10 @@ namespace frog.Windows.TouchProxy.Services
 			{
 				TouchInjection.Send(_pointerTouchInfos.ToArray());
 				OnTouchInjected(new TouchInjectedEventArgs(_pointerTouchInfos.ToArray()));
+
+				// Update cursor position to match the last touch point
+				var lastTouch = _pointerTouchInfos[_pointerTouchInfos.Count - 1];
+				SetCursorPos(lastTouch.PointerInfo.PtPixelLocation.X, lastTouch.PointerInfo.PtPixelLocation.Y);
 			}
 		}
 
