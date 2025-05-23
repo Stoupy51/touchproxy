@@ -135,12 +135,12 @@ namespace frog.Windows.TouchProxy.Services
 
 		public double CalibrationBufferMaxLength
 		{
-			get { return Math.Max(_screenRect.Width, _screenRect.Height); }
+			get { return 2 * Math.Max(_screenRect.Width, _screenRect.Height); }
 		}
 
 		public double CalibrationBufferMinLength
 		{
-			get { return -Math.Max(_screenRect.Width, _screenRect.Height); }
+			get { return -2 * Math.Max(_screenRect.Width, _screenRect.Height); }
 		}
 
 		private double _calibrationBufferLeft = 0;
@@ -149,7 +149,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferLeft; }
 			set
 			{
-				_calibrationBufferLeft = (value.IsBetween(-_screenRect.Width, _screenRect.Width)) ? value : 0;
+				_calibrationBufferLeft = (value.IsBetween(-2 * Math.Max(_screenRect.Width, _screenRect.Height), 2 * Math.Max(_screenRect.Width, _screenRect.Height))) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -160,7 +160,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferTop; }
 			set
 			{
-				_calibrationBufferTop = (value.IsBetween(-_screenRect.Height, _screenRect.Height)) ? value : 0;
+				_calibrationBufferTop = (value.IsBetween(-2 * Math.Max(_screenRect.Width, _screenRect.Height), 2 * Math.Max(_screenRect.Width, _screenRect.Height))) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -171,7 +171,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferRight; }
 			set
 			{
-				_calibrationBufferRight = (value.IsBetween(-_screenRect.Width, _screenRect.Width)) ? value : 0;
+				_calibrationBufferRight = (value.IsBetween(-2 * Math.Max(_screenRect.Width, _screenRect.Height), 2 * Math.Max(_screenRect.Width, _screenRect.Height))) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -182,7 +182,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferBottom; }
 			set
 			{
-				_calibrationBufferBottom = (value.IsBetween(-_screenRect.Height, _screenRect.Height)) ? value : 0;
+				_calibrationBufferBottom = (value.IsBetween(-2 * Math.Max(_screenRect.Width, _screenRect.Height), 2 * Math.Max(_screenRect.Width, _screenRect.Height))) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}

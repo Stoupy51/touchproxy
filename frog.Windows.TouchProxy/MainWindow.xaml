@@ -10,8 +10,8 @@
 	xmlns:converters="clr-namespace:frog.Windows.TouchProxy.Converters"
 	xmlns:services="clr-namespace:frog.Windows.TouchProxy.Services" 
 	Title="TouchProxy"
-    Width="1080"
-    Height="840" 
+    Width="1600"
+    Height="900" 
 	WindowStartupLocation="CenterScreen" 
 	ResizeMode="CanMinimize"
 	Background="#FFFCFCFC">
@@ -20,7 +20,7 @@
 	</Window.DataContext>
 	<Grid Margin="15,5,15,15">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="500" />
+			<ColumnDefinition Width="1000" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -266,12 +266,12 @@
 					</Rectangle>
 					<TextBlock Text="{Binding ElementName=sliderLeft, Path=Value}" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center">
 						<TextBlock.RenderTransform>
-							<TranslateTransform X="-15" Y="-59" />
+							<TranslateTransform X="-15" Y="-79" />
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<Slider x:Name="sliderLeft" Value="{Binding Path=TouchInjectionService.CalibrationBufferLeft, Mode=TwoWay}" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" IsDirectionReversed="True">
+					<Slider x:Name="sliderLeft" Value="{Binding Path=TouchInjectionService.CalibrationBufferLeft, Mode=TwoWay}" Width="160" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" IsDirectionReversed="True">
 						<Slider.RenderTransform>
-							<TranslateTransform X="-20" Y="-40" />
+							<TranslateTransform X="-80" Y="-100" />
 						</Slider.RenderTransform>
 					</Slider>
 
@@ -302,12 +302,12 @@
 					</Rectangle>
 					<TextBlock Text="{Binding ElementName=sliderTop, Path=Value}" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" TextAlignment="Left">
 						<TextBlock.RenderTransform>
-							<TranslateTransform X="76" Y="-8" />
+							<TranslateTransform X="96" Y="-8" />
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<Slider x:Name="sliderTop" Value="{Binding Path=TouchInjectionService.CalibrationBufferTop, Mode=TwoWay}" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Vertical" IsDirectionReversed="False">
+					<Slider x:Name="sliderTop" Value="{Binding Path=TouchInjectionService.CalibrationBufferTop, Mode=TwoWay}" Height="160" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Vertical" IsDirectionReversed="False">
 						<Slider.RenderTransform>
-							<TranslateTransform X="40" Y="-20" />
+							<TranslateTransform X="120" Y="-80" />
 						</Slider.RenderTransform>
 					</Slider>
 
@@ -338,12 +338,12 @@
 					</Rectangle>
 					<TextBlock Text="{Binding ElementName=sliderRight, Path=Value}" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" TextAlignment="Center">
 						<TextBlock.RenderTransform>
-							<TranslateTransform X="15" Y="58" />
+							<TranslateTransform X="15" Y="78" />
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<Slider x:Name="sliderRight" Value="{Binding Path=TouchInjectionService.CalibrationBufferRight, Mode=TwoWay}" Width="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" IsDirectionReversed="False">
+					<Slider x:Name="sliderRight" Value="{Binding Path=TouchInjectionService.CalibrationBufferRight, Mode=TwoWay}" Width="160" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" IsDirectionReversed="False">
 						<Slider.RenderTransform>
-							<TranslateTransform X="19" Y="40" />
+							<TranslateTransform X="79" Y="100" />
 						</Slider.RenderTransform>
 					</Slider>
 
@@ -374,12 +374,12 @@
 					</Rectangle>
 					<TextBlock Text="{Binding ElementName=sliderBottom, Path=Value}" Width="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextAlignment="Right">
 						<TextBlock.RenderTransform>
-							<TranslateTransform X="-76" Y="7" />
+							<TranslateTransform X="-96" Y="7" />
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<Slider x:Name="sliderBottom" Value="{Binding Path=TouchInjectionService.CalibrationBufferBottom, Mode=TwoWay}" Height="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Vertical" IsDirectionReversed="True">
+					<Slider x:Name="sliderBottom" Value="{Binding Path=TouchInjectionService.CalibrationBufferBottom, Mode=TwoWay}" Height="160" HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Vertical" IsDirectionReversed="True">
 						<Slider.RenderTransform>
-							<TranslateTransform X="-40" Y="19" />
+							<TranslateTransform X="-120" Y="79" />
 						</Slider.RenderTransform>
 					</Slider>
 
