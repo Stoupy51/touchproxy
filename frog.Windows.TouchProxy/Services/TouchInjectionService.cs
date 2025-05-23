@@ -77,6 +77,13 @@ namespace frog.Windows.TouchProxy.Services
 			set { _isContactVisible = value; }  
 		}
 
+		private bool _isInvertedCalibration = false;
+		public bool IsInvertedCalibration
+		{
+			get { return _isInvertedCalibration; }
+			set { _isInvertedCalibration = value; }
+		}
+
 		private bool _isWindowsKeyPressEnabled = false;
 		public bool IsWindowsKeyPressEnabled 
 		{
@@ -168,6 +175,8 @@ namespace frog.Windows.TouchProxy.Services
 		{
 			public double Left { get; private set; }
 			public double Top { get; private set; }
+			public double Right { get; private set; }
+			public double Bottom { get; private set; }
 			public double Width { get; private set; }
 			public double Height { get; private set; }
 
@@ -178,6 +187,8 @@ namespace frog.Windows.TouchProxy.Services
 
 				this.Left = (left > right) ? -(oX) : oX;
 				this.Top = (top > bottom) ? -(oY) : oY;
+				this.Right = right;
+				this.Bottom = bottom;
 				this.Width = left + right;
 				this.Height = top + bottom;
 			}
@@ -317,8 +328,13 @@ namespace frog.Windows.TouchProxy.Services
 				_pointerTouchInfos.RemoveAt(i);
 			}
 
-			int x = (int)((tuioCursor.getX() * (_screenRect.Width + _calibrationBuffer.Width)) + _calibrationBuffer.Left + _screenRect.Left);
-			int y = (int)((tuioCursor.getY() * (_screenRect.Height + _calibrationBuffer.Height)) + _calibrationBuffer.Top + _screenRect.Top);
+			double x, y;
+			double left = _isInvertedCalibration ? -2 * _calibrationBuffer.Left : _calibrationBuffer.Left;
+			double top = _isInvertedCalibration ? -2 * _calibrationBuffer.Top : _calibrationBuffer.Top;
+			double right = _isInvertedCalibration ? -2 * _calibrationBuffer.Right : _calibrationBuffer.Right;
+			double bottom = _isInvertedCalibration ? -2 * _calibrationBuffer.Bottom : _calibrationBuffer.Bottom;
+			x = (tuioCursor.getX() * (_screenRect.Width + (right - left))) + left + _screenRect.Left;
+			y = (tuioCursor.getY() * (_screenRect.Height + (bottom - top))) + top + _screenRect.Top;
 
 			_pointerTouchInfos.Add
 			(
@@ -332,15 +348,15 @@ namespace frog.Windows.TouchProxy.Services
 					{
 						PointerInputType = PointerInputType.TOUCH,
 						PointerFlags = PointerFlags.DOWN | PointerFlags.INRANGE | ((this.IsContactEnabled) ? PointerFlags.INCONTACT : PointerFlags.NONE),
-						PtPixelLocation = new PointerTouchPoint { X = x, Y = y },
+						PtPixelLocation = new PointerTouchPoint { X = (int)x, Y = (int)y },
 						PointerId = (uint)pid
 					},
 					ContactArea = new ContactArea
 					{
-						Left = x - CONTACT_AREA_RADIUS,
-						Right = x + CONTACT_AREA_RADIUS,
-						Top = y - CONTACT_AREA_RADIUS,
-						Bottom = y + CONTACT_AREA_RADIUS
+						Left = (int)(x - CONTACT_AREA_RADIUS),
+						Right = (int)(x + CONTACT_AREA_RADIUS),
+						Top = (int)(y - CONTACT_AREA_RADIUS),
+						Bottom = (int)(y + CONTACT_AREA_RADIUS)
 					}
 				}
 			);
@@ -357,18 +373,24 @@ namespace frog.Windows.TouchProxy.Services
 			int i = _pointerTouchInfos.FindIndex(pti => pti.PointerInfo.PointerId == pid);
 			if (i != -1)
 			{
-				int x = (int)((tuioCursor.getX() * (_screenRect.Width + _calibrationBuffer.Width)) + _calibrationBuffer.Left + _screenRect.Left);
-				int y = (int)((tuioCursor.getY() * (_screenRect.Height + _calibrationBuffer.Height)) + _calibrationBuffer.Top + _screenRect.Top);
+				Trace.WriteLine(string.Format("getX: {0}, getY: {1}", tuioCursor.getX(), tuioCursor.getY()), "TUIO");
+				double x, y;
+				double left = _isInvertedCalibration ? -2 * _calibrationBuffer.Left : _calibrationBuffer.Left;
+				double top = _isInvertedCalibration ? -2 * _calibrationBuffer.Top : _calibrationBuffer.Top;
+				double right = _isInvertedCalibration ? -2 * _calibrationBuffer.Right : _calibrationBuffer.Right;
+				double bottom = _isInvertedCalibration ? -2 * _calibrationBuffer.Bottom : _calibrationBuffer.Bottom;
+				x = (tuioCursor.getX() * (_screenRect.Width + (right - left))) + left + _screenRect.Left;
+				y = (tuioCursor.getY() * (_screenRect.Height + (bottom - top))) + top + _screenRect.Top;
 
 				PointerTouchInfo pointerTouchInfo = _pointerTouchInfos[i];
 				pointerTouchInfo.PointerInfo.PointerFlags = PointerFlags.UPDATE | PointerFlags.INRANGE | ((this.IsContactEnabled) ? PointerFlags.INCONTACT : PointerFlags.NONE);
-				pointerTouchInfo.PointerInfo.PtPixelLocation = new PointerTouchPoint { X = x, Y = y };
+				pointerTouchInfo.PointerInfo.PtPixelLocation = new PointerTouchPoint { X = (int)x, Y = (int)y };
 				pointerTouchInfo.ContactArea = new ContactArea
 				{
-					Left = x - CONTACT_AREA_RADIUS,
-					Right = x + CONTACT_AREA_RADIUS,
-					Top = y - CONTACT_AREA_RADIUS,
-					Bottom = y + CONTACT_AREA_RADIUS
+					Left = (int)(x - CONTACT_AREA_RADIUS),
+					Right = (int)(x + CONTACT_AREA_RADIUS),
+					Top = (int)(y - CONTACT_AREA_RADIUS),
+					Bottom = (int)(y + CONTACT_AREA_RADIUS)
 				};
 				_pointerTouchInfos[i] = pointerTouchInfo;
 

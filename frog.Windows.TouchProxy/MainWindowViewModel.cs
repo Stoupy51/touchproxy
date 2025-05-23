@@ -291,6 +291,13 @@ namespace frog.Windows.TouchProxy
 												this.TouchInjectionService.IsContactVisible = isContactVisible;
 											}
 											break;
+										case "IsInvertedCalibration":
+											bool isInvertedCalibration;
+											if (Boolean.TryParse(value.Value, out isInvertedCalibration))
+											{
+												this.TouchInjectionService.IsInvertedCalibration = isInvertedCalibration;
+											}
+											break;
 										case "IsWindowsKeyPressEnabled":
 											bool isWindowsKeyPressEnabled;
 											if (Boolean.TryParse(value.Value, out isWindowsKeyPressEnabled))
@@ -376,6 +383,7 @@ namespace frog.Windows.TouchProxy
 					new XElement("setting", new XAttribute("key", "SelectedScreenTarget"), new XAttribute("value", this.SelectedScreenTarget)),
 					new XElement("setting", new XAttribute("key", "IsContactEnabled"), new XAttribute("value", this.TouchInjectionService.IsContactEnabled)),
 					new XElement("setting", new XAttribute("key", "IsContactVisible"), new XAttribute("value", this.TouchInjectionService.IsContactVisible)),
+					new XElement("setting", new XAttribute("key", "IsInvertedCalibration"), new XAttribute("value", this.TouchInjectionService.IsInvertedCalibration)),
 					new XElement("setting", new XAttribute("key", "IsWindowsKeyPressEnabled"), new XAttribute("value", this.TouchInjectionService.IsWindowsKeyPressEnabled)),
 					new XElement("setting", new XAttribute("key", "WindowsKeyPressTouchCount"), new XAttribute("value", this.TouchInjectionService.WindowsKeyPressTouchCount)),
 					new XElement("setting", new XAttribute("key", "CalibrationBuffer"), new XAttribute("value", string.Format("{0},{1},{2},{3}", this.TouchInjectionService.CalibrationBufferLeft, this.TouchInjectionService.CalibrationBufferTop, this.TouchInjectionService.CalibrationBufferRight, this.TouchInjectionService.CalibrationBufferBottom))),
