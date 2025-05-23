@@ -24,7 +24,6 @@ namespace frog.Windows.TouchProxy.Services
 		private const uint TOUCH_ORIENTATION = 0;
 		private const uint TOUCH_PRESSURE = 1024;
 		private const int DEFAULT_WINDOWS_KEY_PRESS_TOUCH_COUNT = 5;
-		private const double CALIBRATION_BUFFER_MAXLENGTH = 30;
 
 		private static volatile bool _isTouchInjectionSuspended = false;
 
@@ -113,21 +112,21 @@ namespace frog.Windows.TouchProxy.Services
 
 		public double CalibrationBufferMaxLength
 		{
-			get { return CALIBRATION_BUFFER_MAXLENGTH; }
+			get { return Math.Max(_screenRect.Width, _screenRect.Height); }
 		}
 
 		public double CalibrationBufferMinLength
 		{
-			get { return -(CALIBRATION_BUFFER_MAXLENGTH); }
+			get { return -Math.Max(_screenRect.Width, _screenRect.Height); }
 		}
 
 		private double _calibrationBufferLeft = 0;
 		public double CalibrationBufferLeft
 		{
 			get { return _calibrationBufferLeft; }
-			set 
+			set
 			{
-				_calibrationBufferLeft = (value.IsBetween(-(CALIBRATION_BUFFER_MAXLENGTH), CALIBRATION_BUFFER_MAXLENGTH)) ? value : 0;
+				_calibrationBufferLeft = (value.IsBetween(-_screenRect.Width, _screenRect.Width)) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -138,7 +137,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferTop; }
 			set
 			{
-				_calibrationBufferTop = (value.IsBetween(-(CALIBRATION_BUFFER_MAXLENGTH), CALIBRATION_BUFFER_MAXLENGTH)) ? value : 0;
+				_calibrationBufferTop = (value.IsBetween(-_screenRect.Height, _screenRect.Height)) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -149,7 +148,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferRight; }
 			set
 			{
-				_calibrationBufferRight = (value.IsBetween(-(CALIBRATION_BUFFER_MAXLENGTH), CALIBRATION_BUFFER_MAXLENGTH)) ? value : 0;
+				_calibrationBufferRight = (value.IsBetween(-_screenRect.Width, _screenRect.Width)) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
@@ -160,7 +159,7 @@ namespace frog.Windows.TouchProxy.Services
 			get { return _calibrationBufferBottom; }
 			set
 			{
-				_calibrationBufferBottom = (value.IsBetween(-(CALIBRATION_BUFFER_MAXLENGTH), CALIBRATION_BUFFER_MAXLENGTH)) ? value : 0;
+				_calibrationBufferBottom = (value.IsBetween(-_screenRect.Height, _screenRect.Height)) ? value : 0;
 				SetCalibrationBuffer();
 			}
 		}
