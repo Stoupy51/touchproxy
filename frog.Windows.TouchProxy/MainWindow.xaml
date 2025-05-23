@@ -11,7 +11,7 @@
 	xmlns:services="clr-namespace:frog.Windows.TouchProxy.Services" 
 	Title="TouchProxy"
     Width="1080"
-    Height="760" 
+    Height="840" 
 	WindowStartupLocation="CenterScreen" 
 	ResizeMode="CanMinimize"
 	Background="#FFFCFCFC">
@@ -70,11 +70,6 @@
 					<CheckBox IsChecked="{Binding Path=TouchInjectionService.IsContactVisible, Mode=TwoWay}" Content="Show Contacts" Margin="0,2,0,0">
 						<CheckBox.Style>
 							<Style TargetType="{x:Type CheckBox}">
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Path=TouchInjectionService.IsEnabled}" Value="True">
-										<Setter Property="IsEnabled" Value="False" />
-									</DataTrigger>
-								</Style.Triggers>
 							</Style>
 						</CheckBox.Style>
 					</CheckBox>

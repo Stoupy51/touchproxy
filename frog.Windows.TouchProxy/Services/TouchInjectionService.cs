@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
 
 using TUIO;
 
@@ -15,6 +16,9 @@ namespace frog.Windows.TouchProxy.Services
 {
 	public class TouchInjectionService : BindableBase, ITuioListener, IDisposable
 	{
+		[DllImport("user32.dll")]
+		private static extern bool SetCursorPos(int X, int Y);
+
 		private bool _isDisposed = false;
 
 		public const int DEFAULT_PORT = 3333;
@@ -74,7 +78,14 @@ namespace frog.Windows.TouchProxy.Services
 		public bool IsContactVisible 
 		{
 			get { return _isContactVisible; }
-			set { _isContactVisible = value; }  
+			set 
+			{ 
+				_isContactVisible = value;
+				if (_tuioClient != null)
+				{
+					TouchInjection.Initialize(MAX_CONTACTS, this.IsContactVisible ? TouchFeedback.INDIRECT : TouchFeedback.NONE);
+				}
+			}  
 		}
 
 		private bool _isInvertedCalibration = false;
@@ -467,17 +478,15 @@ namespace frog.Windows.TouchProxy.Services
 
 		private void InjectPointerTouchInfos()
 		{
-			PointerTouchInfo[] pointerTouchInfos = _pointerTouchInfos.ToArray();
-
-			if (pointerTouchInfos.Length == 0)
+			if (_isTouchInjectionSuspended)
 			{
-				_refreshTimer.Stop();
+				return;
 			}
 
-			if (!_isTouchInjectionSuspended)
+			if (_pointerTouchInfos.Count > 0)
 			{
-				TouchInjection.Send(pointerTouchInfos);
-				this.OnTouchInjected(new TouchInjectedEventArgs(pointerTouchInfos));
+				TouchInjection.Send(_pointerTouchInfos.ToArray());
+				OnTouchInjected(new TouchInjectedEventArgs(_pointerTouchInfos.ToArray()));
 			}
 		}
 
