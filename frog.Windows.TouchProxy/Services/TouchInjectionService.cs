@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 using TUIO;
 
@@ -18,6 +19,24 @@ namespace frog.Windows.TouchProxy.Services
 	{
 		[DllImport("user32.dll")]
 		private static extern bool SetCursorPos(int X, int Y);
+
+		[DllImport("user32.dll")]
+		private static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+
+		[DllImport("user32.dll")]
+		private static extern bool GetCursorPos(out POINT lpPoint);
+
+		private const uint MOUSEEVENTF_MOVE = 0x0001;
+		private const uint MOUSEEVENTF_ABSOLUTE = 0x8000;
+		private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
+		private const uint MOUSEEVENTF_LEFTUP = 0x0004;
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct POINT
+		{
+			public int X;
+			public int Y;
+		}
 
 		private bool _isDisposed = false;
 
@@ -462,6 +481,25 @@ namespace frog.Windows.TouchProxy.Services
 			}	
 		}
 
+		private void MoveCursorSmoothly(int targetX, int targetY)
+		{
+			try
+			{
+				// Normalize coordinates for absolute positioning
+				int normalizedX = (int)((targetX * 65535) / SystemParameters.PrimaryScreenWidth);
+				int normalizedY = (int)((targetY * 65535) / SystemParameters.PrimaryScreenHeight);
+
+				// Use absolute positioning for reliable movement
+				mouse_event(MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE, normalizedX, normalizedY, 0, 0);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Error in MoveCursorSmoothly: {ex.Message}");
+				// Fallback to direct positioning if something goes wrong
+				SetCursorPos(targetX, targetY);
+			}
+		}
+
 		private void InjectPointerTouchInfos()
 		{
 			if (_isTouchInjectionSuspended)
@@ -474,9 +512,9 @@ namespace frog.Windows.TouchProxy.Services
 				TouchInjection.Send(_pointerTouchInfos.ToArray());
 				OnTouchInjected(new TouchInjectedEventArgs(_pointerTouchInfos.ToArray()));
 
-				// Update cursor position to match the last touch point
+				// Update cursor position to match the last touch point with smooth movement
 				var lastTouch = _pointerTouchInfos[_pointerTouchInfos.Count - 1];
-				SetCursorPos(lastTouch.PointerInfo.PtPixelLocation.X, lastTouch.PointerInfo.PtPixelLocation.Y);
+				MoveCursorSmoothly(lastTouch.PointerInfo.PtPixelLocation.X, lastTouch.PointerInfo.PtPixelLocation.Y);
 			}
 		}
 
